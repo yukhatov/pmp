@@ -1,0 +1,68 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div>Payment details of invoice #{{.InvoiceNumber}}</div>
+    </div>
+</div>
+<table style="margin-left: 30px;">
+    <tr>
+        <td style="width: 200px;">Payee name:</td>
+        <td>{{.Publisher.Name}}</td>
+    </tr>
+    <tr>
+        <td>Address:</td>
+        <td>{{.Publisher.Address}}</td>
+    </tr>
+    <tr>
+        <td>Phone:</td>
+        <td>{{.Publisher.Phone}}</td>
+    </tr>
+    <tr>
+        <td>Email:</td>
+        <td>{{.Publisher.Email}}</td>
+    </tr>
+    <tr>
+        <td>Pay amount:</td>
+        <td>{{printf "%.2f" .Amount}} - {{printf "%.2f" .Fee}} fee = {{subtractTwoFloats .Amount .Fee}} USD</td>
+    </tr>
+    <tr>
+        <td>Invoice created:</td>
+        <td>{{.DateCreated.Format "2006-01-02"}}</td>
+    </tr>
+    <tr>
+        <td>Pay terms:</td>
+        <td>{{.PayTerms}}</td>
+    </tr>
+    <tr>
+        <td>Status:</td>
+        <td>{{.Status}}</td>
+    </tr>
+    <tr>
+        <td>Notes:</td>
+        <td>{{.Notes}}</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top; ">Payment details:</td>
+        <td>
+            <b><u>Wire Transfer</u></b><br>
+            <b>Beneficiary name:</b> {{.Publisher.BeneficiaryName}}<br>
+            <b>Beneficiary account:</b> {{.Publisher.BeneficiaryAccount}}<br>
+            <b>Beneficiary address:</b> {{.Publisher.BeneficiaryAddress}}<br>
+            <b>iban:</b> {{.Publisher.Iban}}<br>
+            <b>Bank name:</b> {{.Publisher.BankName}}<br>
+            <b>Bank address:</b> {{.Publisher.BankAddress}}<br>
+            <b>Routing:</b> {{.Publisher.Routing}}<br>
+            <b>Swift:</b> {{.Publisher.Swift}}
+            <hr>
+            <b><u>PayPal</u></b><br>
+            <b>Email:</b> {{.Publisher.PaypalEmail}}<br>
+            <hr>
+            <b><u>WebMoney</u></b><br>
+            <b>WMZ:</b> {{.Publisher.WebMoneyWmz}}<br>
+            <hr>
+            <b><u>ePayments</u></b><br>
+            <b>ID:</b> {{.Publisher.EpaymentsID}}<br>
+        </td>
+    </tr>
+</table>
+{{end}}

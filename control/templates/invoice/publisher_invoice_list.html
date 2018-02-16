@@ -1,0 +1,70 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">Publishers invoice list</div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/invoice/publisher/create/">Create new<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <td class="text-center">#</td>
+        <td class="text-center">Publisher</td>
+        <td class="text-center">Date created</td>
+        <td class="text-center">Date paid</td>
+        <td class="text-center">Invoice</td>
+        <td class="text-center">View</td>
+        <td class="text-center">Details</td>
+        <td class="text-center">Amount</td>
+        <td class="text-center">Status</td>
+        </thead>
+    {{range $index, $element := .}}
+        <tr>
+            <td style="width: 100px;"><a href="/invoice/publisher/{{$element.ID}}/edit/">{{$element.ID}}</a></td>
+            <td style="width: 130px;" class="text-center">{{$element.Publisher.Name}}</td>
+            <td style="width: 130px;" class="text-center">{{$element.DateCreated.Format "2006-01-02"}}</td>
+            <td style="width: 130px;" class="text-center">
+                {{if eq $element.Status "Paid" }}
+                    {{$element.DatePaid.Format "2006-01-02"}}
+                {{end}}
+            </td>
+            <td style="width: 130px;" class="text-center">{{$element.FileName}}</td>
+            <td style="width: 80px;" class="text-center"><a href="/invoice/publisher/{{$element.ID}}/view_invoice/" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-file"></span> File</a></td>
+            <td style="width: 80px;" class="text-center"><a href="/invoice/publisher/{{$element.ID}}/details/" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-file"></span> Details</a></td>
+            <td style="width: 130px;" class="text-center">{{printf "%.2f" $element.Amount}} USD</td>
+            <td style="width: 130px;" class="text-center">
+                <select name="status" class="status" data-id="{{$element.ID}}">
+                    <option value="Unpaid" {{if eq $element.Status "Unpaid"}}selected{{end}}>Unpaid</option>
+                    <option value="Paid" {{if eq $element.Status "Paid"}}selected{{end}}>Paid</option>
+                </select>
+            </td>
+        </tr>
+    {{end}}
+    </table>
+</div>
+<script>
+    $(function () {
+
+        $('.status').on('change', function () {
+            $("#loader").show();
+            $.ajax({
+                type: "POST",
+                url: "/invoice/publisher/" + $(this).attr("data-id") + "/status_change/" + this.value,
+                data: null,
+                success: function () {
+                    $("#loader").hide();
+                },
+                error: function () {
+                    $("#loader").hide();
+                    //TODO: add normal error handling
+                    console.log("error while saving change");
+                }
+            })
+        });
+    })
+</script>
+{{end}}

@@ -1,0 +1,37 @@
+{{define "main"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remote control</title>
+    {{template "header" .}}
+</head>
+<body>
+    <style>
+        form { padding-right: 50px; }
+        #loader { width: 100%; height: 100%; position: absolute; top: 0; right: 0; background: gray; opacity: 0.2; display: none;}
+        #loader .spinner {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    {{template "menu" .}}
+    {{template "content" .}}
+    <div id="loader"><div class="spinner"></div></div>
+</body>
+</html>
+{{end}}
+{{define "content"}}
+{{end}}

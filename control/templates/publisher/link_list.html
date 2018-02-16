@@ -1,0 +1,41 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">{{.Name}} sources list</div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/publisher/{{.ID}}/link/create/?platform=desktop">Create new desktop<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/publisher/{{.ID}}/link/create/?platform=in-app">Create new in-app<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+        <td>Name</td>
+        <td>Link</td>
+        <td>Platform</td>
+        <td>Optimization</td>
+        <td>Study Requests</td>
+        <td>Ad tags</td>
+        <!--<td>User</td>-->
+        <!--<td>Log as pub</td>-->
+        </thead>
+        {{range $index, $element := .Links}}
+        <tr>
+            <td style="width: 200px;"><a href="/publisher/{{$element.PublisherID}}/link/{{$element.ID}}/edit/">{{$element.Name}}</a></td>
+            <td class="text-center">{{$element.Link}}</td>
+            <td class="text-center">{{$element.Platform}}</td>
+            <td class="text-center">{{$element.Optimization}}</td>
+            <td class="text-center">{{$element.StudyRequests}}</td>
+            <td style="width: 100px;" class="text-center"><a href="/publisher/{{$.ID}}/link/{{$element.ID}}/list/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a></td>
+            <!--<td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/ad_tag/list/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a></td>-->
+            <!--<td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/user/edit/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>-->
+            <!--<td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/log_as_pub/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></td>-->
+        </tr>
+        {{end}}
+    </table>
+</div>
+
+{{end}}

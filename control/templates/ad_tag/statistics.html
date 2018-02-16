@@ -1,0 +1,22 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Statistics for ad unit <b>{{ .AdTag.Name}}</b></div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+        <td>Publisher</td>
+        <td>Impressions</td>
+        </thead>
+        {{range $index, $element := .AdTag.AdTagPublishers}}
+        <tr>
+            <td>{{$element.Publisher.Name}}</td>
+            <td class="text-center">
+                {{index $.ImpressionsPerPublisher $element.ID}}
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+{{end}}

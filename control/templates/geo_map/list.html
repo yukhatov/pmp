@@ -1,0 +1,37 @@
+{{define "content"}}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="regions_div" style="width: 900px; height: 500px;"></div>
+
+<script>
+    google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+    });
+    google.charts.setOnLoadCallback(drawRegionsMap);
+
+    function drawRegionsMap() {
+        var geoData = [];
+        geoData.push(['Country', 'Requests']);
+
+        $.ajax({
+            url: "/geo_map/data",
+            success: function (response) {
+                $.each(response, function (index) {
+                    geoData.push([response[index].geo_country, response[index].requests])
+                })
+            },
+            async: false
+        });
+
+        var data = google.visualization.arrayToDataTable(geoData);
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+    }
+</script>
+{{end}}

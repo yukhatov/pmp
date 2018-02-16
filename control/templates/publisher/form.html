@@ -1,0 +1,124 @@
+{{define "form"}}
+    <form class="form-horizontal" role="form" method="post" action="/publisher/{{.Item.ID}}/edit/">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="name" required="required" placeholder="Publisher name" value="{{ if .Item}}{{.Item.Name}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Company site</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="company_site" name="company_site" placeholder="http://company.com" value="{{ if .Item}}{{.Item.CompanySite}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="phone" class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="phone" name="phone" value="{{ if .Item}}{{.Item.Phone}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address" class="col-sm-2 control-label">Address</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" name="address" value="{{ if .Item}}{{.Item.Address}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" name="email" placeholder="company@email.com" value="{{ if .Item}}{{.Item.Email}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="custom_id" class="col-sm-2 control-label">Custom id</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="custom_id" name="custom_id" required="required" placeholder="42" value="{{ if .CustomId}}{{.CustomId}}{{else}}{{ .Item.CustomID}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="targeting_price" class="col-sm-2 control-label">Targeting price</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="targeting_price" name="targeting_price" placeholder="5.0" value="{{ if .Item}}{{printf "%.2f" .Item.TargetingPrice}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="comments" class="col-sm-2 control-label">Comments</label>
+            <div class="col-sm-10">
+                <textarea name="comments" id="comments" cols="30" rows="10" class="form-control">{{ if .Item}}{{.Item.Comments}}{{end}}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="beneficiary_name" class="col-sm-2 control-label">Beneficiary name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="beneficiary_name" name="beneficiary_name" placeholder="" value="{{ if .Item}}{{.Item.BeneficiaryName}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="beneficiary_account" class="col-sm-2 control-label">Beneficiary account</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="beneficiary_account" name="beneficiary_account" placeholder="" value="{{ if .Item}}{{.Item.BeneficiaryAccount}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="beneficiary_address" class="col-sm-2 control-label">Beneficiary address</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="beneficiary_address" name="beneficiary_address" placeholder="" value="{{ if .Item}}{{.Item.BeneficiaryAddress}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="iban" class="col-sm-2 control-label">Iban</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="iban" name="iban" placeholder="" value="{{ if .Item}}{{.Item.Iban}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="bank_name" class="col-sm-2 control-label">Bank name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="bank_name" name="bank_name" placeholder="" value="{{ if .Item}}{{.Item.BankName}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="bank_address" class="col-sm-2 control-label">Bank address</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="bank_address" name="bank_address" placeholder="" value="{{ if .Item}}{{.Item.BankAddress}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="routing" class="col-sm-2 control-label">Routing</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="routing" name="routing" placeholder="" value="{{ if .Item}}{{.Item.Routing}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="swift" class="col-sm-2 control-label">Swift</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="swift" name="swift" placeholder="" value="{{ if .Item}}{{.Item.Swift}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="paypal_email" class="col-sm-2 control-label">Paypal email</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="paypal_email" name="paypal_email" placeholder="" value="{{ if .Item}}{{.Item.PaypalEmail}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="web_money_wmz" class="col-sm-2 control-label">WebMoney WMZ</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="web_money_wmz" name="web_money_wmz" placeholder="" value="{{ if .Item}}{{.Item.WebMoneyWmz}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="epayments_id" class="col-sm-2 control-label">Epayments ID</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="epayments_id" name="epayments_id" placeholder="" value="{{ if .Item}}{{.Item.EpaymentsID}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input id="submit" name="submit" type="submit" value="{{ if .IsEditing }} Edit {{else}} Create {{end}}" class="btn btn-primary">
+                <input onclick="goBack()" type="button" value="Back" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+{{end}}

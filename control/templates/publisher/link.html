@@ -1,0 +1,7 @@
+{{define "content"}}
+<div class="page-header">
+    <h1>Source<small>{{ if .IsEditing }} Editing {{else}} Creating {{end}} for publisher {{.Publisher.Name}}</small></h1>
+</div>
+
+{{ template "link_form" .}}
+{{end}}

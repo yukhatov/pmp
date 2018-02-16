@@ -1,0 +1,194 @@
+{{define "content"}}
+
+{{ $typeID := .AdTag.AdvertiserPlatformTypeID }}
+
+<div class="page-header">
+    <h1>Ad tag
+        <small>{{ if .IsEditing }} Editing {{else}} Creating {{end}}</small>
+        <small>{{ if .AdTag.IsLocked }} (locked) {{end}}</small>
+    </h1>
+</div>
+{{if .Success }}
+    <div class="alert alert-success" role="alert">You successfully edited ad tag.</div>
+{{end}}
+{{if gt (len .Errors) 1 }}
+<div class="alert alert-danger" role="alert">
+    {{range $index, $element := .Errors}}
+    {{$element}}<br/>
+    {{end}}
+</div>
+{{end}}
+<form class="form-horizontal" role="form" method="post" action="/ad_tag/{{.AdTag.ID}}/edit/">
+    <input type="hidden" name="advertiser_id" value="{{.AdvertiserID}}">
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" name="name" required="required" placeholder="Ad tag name" value="{{ if .AdTag}}{{.AdTag.Name}}{{end}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="url" class="col-sm-2 control-label">Url</label>
+        <div class="col-sm-10">
+            <input
+                type="url"
+                class="form-control" id="url"
+                name="url"
+                required="required"
+                placeholder="http://ad.tag.com"
+                value="{{ if .AdTag}}{{.AdTag.URL}}{{end}}"
+                {{ if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="price" class="col-sm-2 control-label">Advertiser price</label>
+        <div class="col-sm-10">
+            <input
+                type="text"
+                class="form-control" id="price"
+                name="price"
+                required="required"
+                placeholder="5.0"
+                value="{{ if .AdTag}}{{printf "%.2f" .AdTag.Price}}{{end}}"
+                {{ if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="minimum_margin" class="col-sm-2 control-label">Minimum margin</label>
+        <div class="col-sm-10">
+            <input
+                    type="text"
+                    class="form-control" id="minimum_margin"
+                    name="minimum_margin"
+                    required="required"
+                    placeholder="5.0"
+                    value="{{ if .AdTag}}{{printf "%.2f" .AdTag.MinimumMargin}}{{end}}"
+                    {{ if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="geo_info" class="col-sm-2 control-label">Geo</label>
+        <div class="col-sm-10">
+            <input
+                type="text"
+                class="form-control" id="geo_info"
+                name="geo_info"
+                required="required"
+                value="{{if .AdTag}}{{.AdTag.GeoInfo}}{{end}}"
+            {{if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="player_info" class="col-sm-2 control-label">Player Size</label>
+        <div class="col-sm-10">
+            <select name="player_info" id="player_info" class="form-control selectpicker" {{ if .AdTag.IsLocked}}readonly{{end}}>
+                <!--TODO: I don't know why i can't iterate over map[string]string here. Investigate in future-->
+                <option value="SP" {{if eq .AdTag.PlayerInfo "SP"}}selected{{end}}>SP</option>
+                <option value="SM" {{if eq .AdTag.PlayerInfo "SM"}}selected{{end}}>SM</option>
+                <option value="SML" {{if eq .AdTag.PlayerInfo "SML"}}selected{{end}}>SML</option>
+                <option value="MP" {{if eq .AdTag.PlayerInfo "MP"}}selected{{end}}>MP</option>
+                <option value="ML" {{if eq .AdTag.PlayerInfo "ML"}}selected{{end}}>ML</option>
+                <option value="LP" {{if eq .AdTag.PlayerInfo "LP"}}selected{{end}}>LP</option>
+                <option value="MW" {{if eq .AdTag.PlayerInfo "MW"}}selected{{end}}>MW</option>
+                <option value="IA" {{if eq .AdTag.PlayerInfo "IA"}}selected{{end}}>IA</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="platform_info" class="col-sm-2 control-label">Platform</label>
+        <div class="col-sm-10">
+            <input
+                type="text"
+                class="form-control" id="platform_info"
+                name="platform_info"
+                required="required"
+                value="{{if .AdTag}}{{.AdTag.PlatformInfo}}{{end}}"
+                {{if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="type_id" class="col-sm-2 control-label">Platform type:</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="type_id" name="type_id">
+                {{range $index, $element := .Types}}
+                <option value="{{$element.ID}}" {{if eq $element.ID $typeID}}selected="selected"{{end}}>{{$element.Name}}</option>
+                {{end}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="is_vast" class="col-sm-2 control-label">Is Vast 2.0</label>
+        <div class="col-sm-10">
+            <input
+                type="checkbox"
+                id="is_vast"
+                name="is_vast"
+                value="enabled"
+                {{if .AdTag.IsVast}}checked{{end}}
+                {{ if .AdTag.IsLocked}}readonly{{end}}
+            >
+        </div>
+    </div>
+    <hr>
+    <h4 style="margin-left: 100px;">Targeting (only for dynamic links)</h4>
+    <div class="form-group">
+        <label for="is_targeted" class="col-sm-2 control-label">Could be used for targeting</label>
+        <div class="col-sm-10">
+            <input
+                type="checkbox"
+                id="is_targeted"
+                name="is_targeted"
+                value="enabled"
+                {{if .AdTag.IsTargeted}}checked{{end}}
+            >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="geo_country" class="col-sm-2 control-label">Geo country</label>
+        <div class="col-sm-10">
+
+            <select class="form-control selectpicker" data-live-search="true" multiple name="geo_country" id="geo_country">
+                {{range $index, $element := .GeoCountryList}}
+                    <option
+                        value="{{$element.ISOCode}}"
+                        {{range $ISOCode := $.AdTag.GeoCountry}}
+                            {{if eq $ISOCode $element.ISOCode}}selected{{end}}
+                        {{end}}
+                    >{{$element.Name}}</option>
+                {{end}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="device_type" class="col-sm-2 control-label">Device type</label>
+        <div class="col-sm-10">
+            <select name="device_type" id="device_type" class="form-control selectpicker">
+                <option value="desktop" {{if eq .AdTag.DeviceType "desktop"}}selected{{end}}>desktop</option>
+                <option value="mobile" {{if eq .AdTag.DeviceType "mobile"}}selected{{end}}>mobile</option>
+                <option value="in-app" {{if eq .AdTag.DeviceType "in-app"}}selected{{end}}>in-app</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="domains_list" class="col-sm-2 control-label">Domains list</label>
+        <div class="col-sm-10">
+            <select class="form-control selectpicker" id="domains_list" name="domains_list" data-live-search="true">
+                <option value="0">-</option>
+                {{range $index, $element := .DomainsLists}}
+                    <option value="{{$element.ID}}" {{if eq $.AdTag.DomainsListID $element.ID}}selected{{end}}>{{$element.Name}} - {{$element.Type}}</option>
+                {{end}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+            <input id="submit" name="submit" type="submit" value="{{ if .IsEditing }} Edit {{else}} Create {{end}}" class="btn btn-primary">
+            <input onclick="goBack()" type="button" value="Back" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+{{end}}

@@ -1,0 +1,14 @@
+{{ define "content" }}
+    <div class="page-header">
+        <h1>Publisher <small>{{ if .IsEditing }} Editing {{else}} Creating {{end}}</small></h1>
+    </div>
+
+    <div style="margin-left: 150px; margin-bottom: 40px;">
+        <b>Publisher targeting link</b>
+        <br>
+        {{ .Item.TargetingLink }}
+        <br>
+    </div>
+
+    {{ template "form" .}}
+{{ end }}

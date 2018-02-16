@@ -1,0 +1,11 @@
+package: bitbucket.org/tapgerine/pmp
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/lib/pq
+- package: github.com/jinzhu/gorm
+- package: github.com/go-playground/universal-translator
+- package: gopkg.in/go-playground/validator.v9
+- package: github.com/asaskevich/govalidator
+- package: github.com/go-redis/redis
+- package: github.com/roistat/go-clickhouse
+- package: github.com/dgrijalva/jwt-go

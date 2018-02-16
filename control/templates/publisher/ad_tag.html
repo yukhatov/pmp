@@ -1,0 +1,9 @@
+{{define "content"}}
+    <div class="page-header">
+        <h1>Publisher's URL <small>Creating for publisher {{.Publisher.Name}}</small></h1>
+    </div>
+
+    {{ template "ad_tag_form" .}}
+
+    <script type="application/javascript" src="/static/js/ad_tag.js"></script>
+{{end}}

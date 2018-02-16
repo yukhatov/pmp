@@ -1,0 +1,21 @@
+{{define "content"}}
+    <div class="page-header">
+        <h1>Source <small>Creating for publisher {{.Publisher.Name}}</small></h1>
+    </div>
+
+    {{ if .Success }}
+        <div class="alert alert-success" role="alert">You successfully {{ if .IsEditing }} edited {{else}} created {{end}} Source</div>
+    {{ else }}
+        <div class="alert alert-danger" role="alert">Source is not {{ if .IsEditing }} edited {{else}} created {{end}}</div>
+    {{ end }}
+
+    {{if gt (len .Errors) 0 }}
+        <div class="alert alert-danger" role="alert">
+            {{range $index, $element := .Errors}}
+                {{$element}}<br/>
+            {{end}}
+        </div>
+    {{end}}
+
+    {{ template "link_form" .}}
+{{end}}

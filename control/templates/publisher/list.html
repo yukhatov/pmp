@@ -1,0 +1,35 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">Publishers list</div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/publisher/create/">Create new<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+        <td>Name</td>
+        <td>Custom id</td>
+        <td>Ad tags</td>
+        <td>Sources</td>
+        <td>User</td>
+        <td>Log as pub</td>
+        </thead>
+        {{range $index, $element := .}}
+        <tr>
+            <td><a href="/publisher/{{$element.ID}}/edit/">{{$element.Name}}</a></td>
+            <td style="width: 100px;" class="text-center">{{$element.CustomID}}</td>
+            <td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/ad_tag/list/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> ({{len $element.AdTagPublisher}})</a></td>
+            <td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/link/list/"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ({{len $element.Links}})</a></td>
+            <td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/user/edit/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
+            <td style="width: 100px;" class="text-center"><a href="/publisher/{{$element.ID}}/log_as_pub/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+
+{{end}}

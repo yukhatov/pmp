@@ -1,0 +1,43 @@
+{{define "form"}}
+    <form class="form-horizontal" role="form" method="post" action="{{ if .IsEditing }}/parameter/{{.Item.ID}}/edit/{{else}}/parameter/create/{{end}}">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="name" required="required" placeholder="Parameter name" value="{{ if .Item}}{{.Item.Name}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="shortcut" class="col-sm-2 control-label">Shortcut</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="shortcut" name="shortcut" required="required" placeholder="param" value="{{ if .Item}}{{.Item.Shortcut}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="macros" class="col-sm-2 control-label">Macros</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="macros" name="macros" required="required" placeholder="[param]" value="{{ if .Item}}{{.Item.Macros}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="default_value" class="col-sm-2 control-label">Default value</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="default_value" name="default_value" placeholder="default" value="{{ if .Item}}{{.Item.DefaultValue}}{{end}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="platform" class="col-sm-2 control-label">Platform</label>
+            <div class="col-sm-10">
+                <select name="platform" id="platform" class="form-control selectpicker">
+                    <option value="desktop" {{if eq .Item.Platform "desktop"}}selected{{end}}>Desktop</option>
+                    <option value="in-app" {{if eq .Item.Platform "in-app"}}selected{{end}}>In-app</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input id="submit" name="submit" type="submit" value="OK" class="btn btn-primary">
+                <input onclick="goBack()" type="button" value="Back" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+{{end}}

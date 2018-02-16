@@ -1,0 +1,58 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">{{.Name}} links list</div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/publisher/{{.PublisherID}}/link/{{.ID}}/add_ad_tag_publisher/">Create new<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/publisher/{{.PublisherID}}/link/{{.ID}}/add_tag/">Create new from ad tag<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+        <td>Name</td>
+        <td>AdTag</td>
+        <td>Is Active</td>
+        </thead>
+        {{range $index, $element := .PublisherLinkAdTagPublisher}}
+        <tr>
+            <td><a href="/ad_tag/{{$element.AdTagPublisher.AdTagID}}/publisher/edit/{{$element.AdTagPublisher.ID}}">{{$element.AdTagPublisher.Name}}</a></td>
+            <td><a href="/ad_tag/{{$element.AdTagPublisher.AdTagID}}/edit/">{{$element.AdTagPublisher.AdTag.Name}}</a></td>
+            <td style="width: 100px;" class="text-center">
+                <input
+                    type="checkbox"
+                    class="activate_link_ad_tag_publisher"
+                    {{if $element.IsActive}}checked{{end}}
+                    data-id="{{$element.ID}}"
+                />
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+<script>
+    $(function () {
+        $('.activate_link_ad_tag_publisher').click(function () {
+            $("#loader").show();
+            $.ajax({
+                type: "POST",
+                url: "/publisher_link_ad_tag_publisher/" + $(this).attr("data-id") + "/activation/",
+                data: null,
+                success: function () {
+                    $("#loader").hide();
+                },
+                error: function () {
+                    $("#loader").hide();
+                    //TODO: add normal error handling
+                    console.log("error while saving is_active");
+                }
+            })
+        });
+    })
+</script>
+
+
+{{end}}

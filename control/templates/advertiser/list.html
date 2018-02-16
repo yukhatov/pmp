@@ -1,0 +1,31 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">Advertisers list</div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/advertiser/create/">Create new<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+            <td class="text-center">Name</td>
+            <td class="text-center">Custom id</td>
+            <td class="text-center">Create ad tag</td>
+            <td class="text-center">View ad tags</td>
+        </thead>
+        {{range $index, $element := .}}
+        <tr>
+            <td><a href="/advertiser/{{$element.ID}}/edit/">{{$element.Name}}</a></td>
+            <td style="width: 130px;" class="text-center">{{$element.CustomID}}</td>
+            <td style="width: 130px;" class="text-center"><a href="/ad_tag/create/{{$element.ID}}"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></td>
+            <td style="width: 130px;" class="text-center"><a href="/ad_tag/list/{{$element.ID}}"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> ({{len $element.AdTags}})</a></td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+
+{{end}}

@@ -1,0 +1,314 @@
+{{define "main"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+
+	<title>Tapgerine</title>
+	<meta name="description" content="">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/main.min.css">
+
+
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#000">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#000">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#000">
+
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+	<script src="/static/libs/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/static/libs/moment/moment.js"></script>
+	<script src="/static/libs/jquery-date-range-picker-master/daterangepicker.js"></script>
+
+</head>
+
+<body class="page">
+	<!-- BEGIN sidebar -->
+	<aside class='sidebar'>
+		<!-- BEGIN sidebar__top -->
+		<div class="sidebar__top">
+			<a href="/publisher_admin/" class="sidebar__logo logo">
+				<img src="/static/img/logo.svg" alt="Logo">
+			</a>
+		</div>
+		<!-- END sidebar__top -->
+		<!-- BEGIN sidebar__content -->
+		<div class='sidebar__content'>
+			<!-- BEGIN sidebar-panel -->
+			<div class="sidebar__panel sidebar-panel">
+				<!-- BEGIN sidebar-panel__line -->
+				<div class="sidebar-panel__line">
+					<div class="sidebar-panel__item" style="width: 100%;">
+						<div class="sidebar-panel__name">TIME {{.User.DefaultTimezone}}</div>
+						<div class="sidebar-panel__value" id="clock" data-timezone="{{.User.DefaultTimezone}}">00:00:00</div>
+					</div>
+				</div>
+				<!-- END sidebar-panel__line -->
+				<!-- BEGIN sidebar-panel__line -->
+				<div class="sidebar-panel__line">
+					<div class="sidebar-panel__item">
+						<div class="sidebar-panel__name">ACTIVE TAGS</div>
+						<div class="sidebar-panel__value">{{.LeftSidebar.ActiveTags}}</div>
+					</div>
+					<div class="sidebar-panel__item">
+						<div class="sidebar-panel__name">AD REQUESTS</div>
+						<div class="sidebar-panel__value">{{.LeftSidebar.AdRequests}}</div>
+					</div>
+				</div>
+				<!-- END sidebar-panel__line -->
+				<!-- BEGIN sidebar-panel__line -->
+				<div class="sidebar-panel__line">
+					<div class="sidebar-panel__item">
+						<div class="sidebar-panel__name">IMPRESSIONS</div>
+						<div class="sidebar-panel__value">{{.LeftSidebar.Impressions}}</div>
+					</div>
+					<div class="sidebar-panel__item">
+						<div class="sidebar-panel__name">INCOME</div>
+						<div class="sidebar-panel__value">${{printf "%.2f" .LeftSidebar.Income}}</div>
+					</div>
+				</div>
+				<!-- END sidebar-panel__line -->
+				<!-- BEGIN sidebar-panel__search -->
+				<form action="/publisher_admin/" class="sidebar-panel__search search">
+					<input type="text" class="search__input" placeholder="Search tags" name="search" id="search_tags" value="{{.Search}}">
+					<span href="#" class="search__ico">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+				</form>
+				<!-- END sidebar-panel__search -->
+			</div>
+			<!-- END sidebar-panel -->
+			<!-- BEGIN sidebar__manager sidebar-manager -->
+			<div class='sidebar__manager sidebar-manager'>
+				<div class="sidebar-manager__title">Account Manager</div>
+				<div class="sidebar-manager__person">
+					<div class="sidebar-manager__icon">
+						<img src="/static/img/user.png" alt="">
+					</div>
+					<div class="sidebar-manager__info">
+						<div class="sidebar-manager__name">СPM manager</div>
+						<a href="mailto:cpm@tapgerine.com" class="sidebar-manager__contact"><i class="fa fa-envelope"></i> Send E-mail</a>
+						<a href="skype:live:irene.hafez?chat" class="sidebar-manager__contact"><i class="fa fa-skype"></i> live:irene.hafez</a>
+					</div>
+				</div>
+			</div>
+			<!-- END sidebar__manager sidebar-manager -->
+		</div>
+		<!-- END sidebar__content -->
+	</aside>
+	<!-- END sidebar -->
+	<!-- BEGIN main -->
+	<main class='main'>
+		<!-- BEGIN main__top-bar -->
+		<div class="main__top-bar top-bar">
+			<div class="top-bar__page-name">Dashboard</div>
+			<div class="top-bar__user user">
+				<div class="user__ico">
+					<img src="/static/img/user.png" alt="">
+				</div>
+				<div class="user__info">
+					<div class="user__name"><strong>{{.User.FullName}}</strong></div>
+					<!--<div class="user__position">Manager</div>-->
+				</div>
+				<a href="/logout" class="user__sign-out">
+					<i class="fa fa-sign-out"></i>
+				</a>
+			</div>
+		</div>
+		<!-- END main__top-bar -->
+		<!-- BEGIN main__content -->
+		<div class='main__content content'>
+			<!-- BEGIN control-panel -->
+			<div class="control-panel content__control-panel">
+				<div class="control-panel__name">Period</div>
+				<div class="control-panel__content">
+					<div class="control-panel__date date">
+						<div class="multiple__input date__input">
+							<input type="text" value="{{.StartDate}} - {{.EndDate}}" >
+						</div>
+						<!--<div class="single__input date__input">-->
+							<!--<input type="text" value="8 Aug 2017">-->
+						<!--</div>-->
+					</div>
+					<div class="control-panel__btn" id="csv_export">
+						<span class="btn">Export CSV <i class="fa fa-upload"></i> </span>
+					</div>
+				</div>
+			</div>
+			<!-- END control-panel -->
+			<!-- BEGIN charts -->
+			<!--<div class='content__charts charts'>-->
+				<!--&lt;!&ndash; BEGIN charts__item &ndash;&gt;-->
+				<!--<div class="charts__item">-->
+					<!--<div class="charts__top">-->
+						<!--<div class="charts__name">Traffic chart</div>-->
+					<!--</div>-->
+					<!--<div class="charts__app">-->
+						<!--<img src="/static/img/char-1.png" alt="">-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--&lt;!&ndash; END charts__item &ndash;&gt;-->
+				<!--&lt;!&ndash; BEGIN charts__item &ndash;&gt;-->
+				<!--<div class="charts__item">-->
+					<!--<div class="charts__top">-->
+						<!--<div class="charts__name">Payout Chart</div>-->
+					<!--</div>-->
+					<!--<div class="charts__app">-->
+						<!--<img src="/static/img/char-2.png" alt="">-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--&lt;!&ndash; END charts__item &ndash;&gt;-->
+			<!--</div>-->
+			<!-- END charts -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Requests</th>
+						<th>Impressions</th>
+						<th>Fill rate, %</th>
+						<th>Revenue</th>
+					</tr>
+				</thead>
+				{{range $index, $element := .Stats}}
+					<tbody>
+						<tr>
+							<td>
+								<div class='table__date-wrapper'>
+									<span class="table__date"><strong>{{$index}}</strong></span>
+								</div>
+							</td>
+							{{$totalStats := index $.TotalStats $index}}
+							<td>{{$totalStats.Requests}}</td>
+							<td>{{$totalStats.Impressions}}</td>
+							<td>{{calculateFillRate $totalStats.Impressions $totalStats.Requests}}</td>
+							<td><strong>${{printf "%.2f" $totalStats.Amount}}<strong></td>
+						</tr>
+						{{range $element}}
+							<tr>
+								<td>{{.Date}}</td>
+								<td>{{.Requests}}</td>
+								<td>{{.Impressions}}</td>
+								<td>{{printf "%.2f" .FillRate}}</td>
+								<td><strong>${{printf "%.2f" .Amount}}</strong></td>
+							</tr>
+						{{end}}
+					</tbody>
+				{{end}}
+				<!--<tbody>-->
+					<!--<tr>-->
+						<!--<td colspan="5">-->
+							<!--<div class='table__date-wrapper'>-->
+								<!--<span class="table__date"><strong>Today</strong></span>-->
+							<!--</div>-->
+						<!--</td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status"></div> Some Name</td>-->
+						<!--<td>256</td>-->
+						<!--<td>23</td>-->
+						<!--<td>54</td>-->
+						<!--<td><strong>$1024</strong></td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status status_success"></div> Some Tag Name</td>-->
+						<!--<td>52</td>-->
+						<!--<td>366</td>-->
+						<!--<td>98</td>-->
+						<!--<td><strong>$2036</strong></td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status status_success"></div> Some Tag Name</td>-->
+						<!--<td>122</td>-->
+						<!--<td>586</td>-->
+						<!--<td>100</td>-->
+						<!--<td><strong>$3851</strong></td>-->
+					<!--</tr>-->
+				<!--</tbody>-->
+				<!--<tbody>-->
+					<!--<tr>-->
+						<!--<td colspan="5">-->
+							<!--<div class='table__date-wrapper'>-->
+								<!--<span class="table__date"><strong>Yesterday</strong></span>-->
+							<!--</div>-->
+						<!--</td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status"></div> Some Name</td>-->
+						<!--<td>256</td>-->
+						<!--<td>23</td>-->
+						<!--<td>54</td>-->
+						<!--<td><strong>$1024</strong></td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status status_success"></div> Some Tag Name</td>-->
+						<!--<td>52</td>-->
+						<!--<td>366</td>-->
+						<!--<td>98</td>-->
+						<!--<td><strong>$2036</strong></td>-->
+					<!--</tr>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="status status_success"></div> Some Tag Name</td>-->
+						<!--<td>122</td>-->
+						<!--<td>586</td>-->
+						<!--<td>100</td>-->
+						<!--<td><strong>$3851</strong></td>-->
+					<!--</tr>-->
+				<!--</tbody>-->
+				<!--<tbody>-->
+					<!--<tr>-->
+						<!--<td colspan="5">-->
+							<!--<div class='table__date-wrapper'>-->
+								<!--<span class="table__date"><strong>3 August</strong></span>-->
+							<!--</div>-->
+						<!--</td>-->
+						<!--<tr>-->
+							<!--<td>-->
+								<!--<div class="status"></div> Some Name</td>-->
+							<!--<td>256</td>-->
+							<!--<td>23</td>-->
+							<!--<td>54</td>-->
+							<!--<td><strong>$1024</strong></td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>-->
+								<!--<div class="status status_success"></div> Some Tag Name</td>-->
+							<!--<td>52</td>-->
+							<!--<td>366</td>-->
+							<!--<td>98</td>-->
+							<!--<td><strong>$2036</strong></td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>-->
+								<!--<div class="status status_success"></div> Some Tag Name</td>-->
+							<!--<td>122</td>-->
+							<!--<td>586</td>-->
+							<!--<td>100</td>-->
+							<!--<td><strong>$3851</strong></td>-->
+						<!--</tr>-->
+				<!--</tbody>-->
+			</table>
+		</div>
+		<!-- END main__content -->
+	</main>
+	<!-- END main -->
+	<!--<script src="/static/js/scripts.min.js"></script>-->
+	<script src="/static/js/common.js"></script>
+</body>
+
+</html>
+{{end}}

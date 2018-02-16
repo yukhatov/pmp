@@ -1,0 +1,364 @@
+{{define "content"}}
+<script>
+    $(function () {
+        $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+        $.fn.datepicker.defaults.autoclose = true;
+
+        $('#start_date').datepicker();
+        $('#end_date').datepicker();
+    });
+</script>
+<form id="filters" name="filters" class="form-horizontal" role="form" method="get" action="/statistics_rtb" onsubmit="validateForm(event)">
+    <div>
+        <div style="float: left; width: 300px;">
+            <div style="margin-left: 20px;">
+                <label for="start_date" >Start date</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" id="start_date" name="start_date" required="required" placeholder="start date" value="{{.StartDate}}">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-left: 20px;">
+                <label for="end_date">End date</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" id="end_date" name="end_date" required="required" placeholder="end date" value="{{.EndDate}}">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+                <p id="validation_message"></p>
+            </div>
+            <div style="margin-left: 20px; width: 200px;">
+                <label for="timezone">Timezone</label>
+                <select class="form-control selectpicker" name="timezone" id="timezone">
+                {{range $index, $element := .AvailableTimezones}}
+                    <option value="{{$element.SystemValue}}" {{if eq $.SelectedTimezone $element.SystemValue }}selected{{end}}>{{$element.UserValue}}</option>
+                {{end}}
+                </select>
+            </div>
+        </div>
+        {{/*<div style="float: left;">*/}}
+            {{/*<div style="margin-left: 20px; width: 200px;">*/}}
+                {{/*<label for="advertiser">Advertiser</label>*/}}
+                {{/*<select class="form-control selectpicker" name="advertiser" id="advertiser" data-live-search="true">*/}}
+                    {{/*<option value="0">-</option>*/}}
+                {{/*{{range $index, $element := .Advertisers}}*/}}
+                    {{/*<option value="{{$element.ID}}" {{if eq $.AdvertiserID $element.ID }}selected{{end}}>{{$element.Name}}</option>*/}}
+                {{/*{{end}}*/}}
+                {{/*</select>*/}}
+            {{/*</div>*/}}
+            {{/*<div style="margin-left: 20px; width: 200px;">*/}}
+                {{/*<label for="publisher">Publisher</label>*/}}
+                {{/*<select class="form-control selectpicker" name="publisher" id="publisher" data-live-search="true">*/}}
+                    {{/*<option value="0">-</option>*/}}
+                {{/*{{range $index, $element := .Publishers}}*/}}
+                    {{/*<option value="{{$element.ID}}" {{if eq $.PublisherID $element.ID }}selected{{end}}>{{$element.Name}}</option>*/}}
+                {{/*{{end}}*/}}
+                {{/*</select>*/}}
+            {{/*</div>*/}}
+        {{/*</div>*/}}
+        {{/*<div style="float: left;">
+            <div style="margin-left: 20px; width: 200px;">
+                <label for="ad_tag">Ad Tag</label>
+                <select class="form-control selectpicker" name="ad_tag" id="ad_tag" data-live-search="true">
+                    <option value="0">-</option>
+                {{range $index, $element := .AdTags}}
+                    <option value="{{$element.ID}}" {{if eq $.AdTagID $element.ID }}selected{{end}}>{{$element.Name}}</option>
+                {{end}}
+                </select>
+                <div>
+                    <label for="ad_tag">Source</label>
+                    <select class="form-control selectpicker" name="pub_link" id="pub_link" data-live-search="true">
+                        <option value="0">-</option>
+                    </select>
+                </div>
+            </div>
+        </div>*/}}
+        {{/*<div style="float: left;">*/}}
+            {{/*<div style="margin-left: 20px; width: 200px;">*/}}
+                {{/*<div id="group-by">*/}}
+                    {{/*<label for="group_by">Group by</label>*/}}
+                    {{/*<select class="form-control selectpicker" name="group_by" id="group_by" disabled>*/}}
+                        {{/*<option value="ad_tag" >By Ad Tags</option>*/}}
+                        {{/*<option value="advertiser" >By Advertisers</option>*/}}
+                        {{/*<option value="publisher" >By Publishers</option>*/}}
+                        {{/*<option value="ad_tag_publisher" >By Publisher's URL</option>*/}}
+                        {{/*<option value="publisher_links" >By Sources</option>*/}}
+                        {{/*<option value="publisher_links_with_ad_tags" >By Sources and Ad tags</option>*/}}
+                    {{/*</select>*/}}
+                {{/*</div>*/}}
+            {{/*</div>*/}}
+        {{/*</div>*/}}
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-10" style="margin: 20px 0 0 20px;">
+            <input id="submit" name="submit" type="submit" value="Show" class="btn btn-primary">
+            <input id="today" name="today" type="button" value="Today" class="btn btn-primary">
+            <input id="yesterday" name="yesterday" type="button" value="Yesterday" class="btn btn-primary">
+            <input id="month" name="month" type="button" value="This month" class="btn btn-primary">
+        {{/*{{if gt (len .Stats) 0 }}*/}}
+            {{/*<input id="csv" name="csv" type="button" value="Export CSV" class="btn btn-primary">*/}}
+            {{/*<input id="domains_export" name="domains_export" type="button" value="Export all domains" class="btn btn-primary">*/}}
+        {{/*{{end}}*/}}
+        {{/*{{ if or (not (eq .PublisherID 0)) (not (eq .AdTagID 0)) (not (eq .AdvertiserID 0))  }}*/}}
+            {{/*<div class="btn-group">*/}}
+                {{/*<button name="split" type="button" value="split" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">*/}}
+                    {{/*Show Geo/Devices <span class="caret"></span>*/}}
+                {{/*</button>*/}}
+                {{/*<ul class="dropdown-menu" role="menu" id="split">*/}}
+                    {{/*<li><a href="#" id="geo">Geo</a></li>*/}}
+                    {{/*<li><a href="#" id="device">Devices</a></li>*/}}
+                    {{/*<li><a href="#" id="domain">Domain</a></li>*/}}
+                    {{/*<li><a href="#" id="app_name">App Name</a></li>*/}}
+                    {{/*<li><a href="#" id="bundle_id">Bundle ID</a></li>*/}}
+                {{/*</ul>*/}}
+            {{/*</div>*/}}
+        {{/*{{end}}*/}}
+        </div>
+    </div>
+</form>
+<style>
+    td { border-right: 1px dashed gray;}
+</style>
+
+{{if gt (len .Stats) 0 }}
+<table class="table">
+    <thead>
+    {{if .FieldsToShow.Advertiser}}
+        <td>Advertiser</td>
+    {{end}}
+    {{if .FieldsToShow.PublisherLink}}
+        <td>Publisher's Source</td>
+    {{end}}
+    {{if .FieldsToShow.Publisher}}
+        <td>Publisher</td>
+    {{end}}
+    {{if .FieldsToShow.Date}}
+        <td>Date</td>
+    {{end}}
+    {{if .FieldsToShow.GeoCountry}}
+        <td>Country</td>
+    {{end}}
+    {{if .FieldsToShow.DeviceType}}
+        <td>Device</td>
+    {{end}}
+    {{if .FieldsToShow.Domain}}
+        <td>Domain</td>
+    {{end}}
+    {{if .FieldsToShow.AppName}}
+        <td>App Name</td>
+    {{end}}
+    {{if .FieldsToShow.BundleID}}
+        <td>Bundle Id</td>
+    {{end}}
+    <td>
+        <div>
+            <div style="float: left;">Init</div>
+        {{/*<div style="float: right;">{{commaSeparator .TotalStats.Requests}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Error</div>
+        {{/*<div style="float: right;">{{commaSeparator .TotalStats.Requests}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Auction</div>
+        {{/*<div style="float: right;">{{commaSeparator .TotalStats.Requests}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Requests</div>
+            {{/*<div style="float: right;">{{commaSeparator .TotalStats.Requests}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Responses</div>
+            {{/*<div style="float: right;">{{commaSeparator .TotalStats.Impressions}}</div>*/}}
+        </div>
+    </td>
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Response time</div>*/}}
+            {{/*<div style="float: right;">{{calculateFillRate .TotalStats.Impressions .TotalStats.Requests}}</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    <td>
+        <div>
+            <div style="float: left;">Timeout</div>
+            {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Amount}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Empty</div>
+            {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.OriginalAmount}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Win</div>
+            {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        </div>
+    </td>
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Player load</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Player loaded</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">BidReceived</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    <td>
+        <div>
+            <div style="float: left;">Loaded</div>
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Start</div>
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">AdRequested</div>
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">AdLoad</div>
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">AdError</div>
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Impressions</div>
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Amount</div>
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Origin amount</div>
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        </div>
+    </td>
+    <td>
+        <div>
+            <div style="float: left;">Profit</div>
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        </div>
+    </td>
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Floor price</div>*/}}
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Price</div>*/}}
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    {{/*<td>*/}}
+        {{/*<div>*/}}
+            {{/*<div style="float: left;">Second price</div>*/}}
+        {{/*<div style="float: right;">{{printf "%.2f" .TotalStats.Profit}}</div>*/}}
+        {{/*</div>*/}}
+    {{/*</td>*/}}
+    </thead>
+    {{range $index, $element := .Stats}}
+        <tr>
+            {{if $.FieldsToShow.Advertiser}}
+                <td><a href="#" id="advertiser-filter" data-advertiser-id="{{$element.AdvertiserID}}">{{$element.Advertiser}}</a></td>
+            {{end}}
+            {{if $.FieldsToShow.PublisherLink}}
+                <td><a href="#" id="pub_link-filter" data-pub-link-id="{{$element.PublisherLinkID}}" data-publisher-id="{{$element.PublisherID}}">{{$element.PublisherLink}}</a></td>
+            {{end}}
+            {{/*{{if $.FieldsToShow.AdTag}}*/}}
+                {{/*<td><a href="#" id="ad_tag-filter" data-ad-tag-id="{{$element.AdTagID}}">{{$element.AdTag}}</a></td>*/}}
+            {{/*{{end}}*/}}
+            {{if $.FieldsToShow.Publisher}}
+                <td><a href="#" id="publisher-filter" data-publisher-id="{{$element.PublisherID}}">{{$element.Publisher}}</a></td>
+            {{end}}
+            {{/*{{if $.FieldsToShow.AdTagPublisher}}*/}}
+                {{/*<td><a href="#" id="ad_tag_publisher-filter" data-ad-tag-publisher-id="{{$element.AdTagPublisherID}}">{{$element.AdTagPublisher}}</a></td>*/}}
+            {{/*{{end}}*/}}
+            {{if $.FieldsToShow.Date}}
+                <td style="text-align: right;">{{$element.Date}}</td>
+            {{end}}
+            {{/*{{if $.FieldsToShow.RequestType}}*/}}
+                {{/*<td>{{$element.RequestType}}</td>*/}}
+            {{/*{{end}}*/}}
+            {{if $.FieldsToShow.GeoCountry}}
+                <td>{{$element.GeoCountry}}</td>
+            {{end}}
+            {{if $.FieldsToShow.DeviceType}}
+                <td>{{$element.DeviceType}}</td>
+            {{end}}
+            {{if $.FieldsToShow.Domain}}
+                <td>{{$element.Domain}}</td>
+            {{end}}
+            {{if $.FieldsToShow.AppName}}
+                <td>{{$element.AppName}}</td>
+            {{end}}
+            {{if $.FieldsToShow.BundleID}}
+                <td>{{$element.BundleID}}</td>
+            {{end}}
+            <td style="text-align: right;">{{$element.Init}}</td>
+            <td style="text-align: right;">{{$element.InitError}}</td>
+            <td style="text-align: right;">{{$element.Auction}}</td>
+            <td style="text-align: right;">{{$element.Requests}}</td>
+            <td style="text-align: right;">{{$element.BidResponse}}</td>
+            {{/*<td style="text-align: right;">{{$element.BidResponseTime}}</td>*/}}
+            <td style="text-align: right;">{{$element.BidResponseTimeout}}</td>
+            <td style="text-align: right;">{{$element.BidResponseEmpty}}</td>
+            <td style="text-align: right;">{{$element.BidWin}}</td>
+            <td style="text-align: right;">{{$element.VPAIDLoaded}}</td>
+            <td style="text-align: right;">{{$element.VPAIDStart}}</td>
+            <td style="text-align: right;">{{$element.VPAIDAdRequested}}</td>
+            <td style="text-align: right;">{{$element.VPAIDAdLoad}}</td>
+            <td style="text-align: right;">{{$element.VPAIDAdError}}</td>
+            {{/*<td style="text-align: right;">{{$element.VPAIDLoadPlayer}}</td>*/}}
+            {{/*<td style="text-align: right;">{{$element.VPAIDPlayerLoaded}}</td>*/}}
+            {{/*<td style="text-align: right;">{{$element.VPAIDBidReceived}}</td>*/}}
+            {{/*<td style="text-align: right;">{{$element.BidFloorPrice}}</td>*/}}
+            {{/*<td style="text-align: right;">{{$element.BidPrice}}</td>*/}}
+            {{/*<td style="text-align: right;">{{$element.SecondPrice}}</td>*/}}
+            {{/*<td style="text-align: right;">{{printf "%.4f" $element.FillRate}}</td>*/}}
+            <td style="text-align: right;">{{$element.Impressions}}</td>
+            <td style="text-align: right;">{{printf "%.2f" $element.Amount}}</td>
+            <td style="text-align: right;">{{printf "%.2f" $element.OriginalAmount}}</td>
+            <td style="text-align: right;">{{printf "%.2f" $element.Profit}}</td>
+        </tr>
+    {{end}}
+</table>
+{{end}}
+
+<script type="application/javascript" src="/static/js/search.js"></script>
+{{end}}

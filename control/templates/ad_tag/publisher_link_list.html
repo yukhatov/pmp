@@ -1,0 +1,35 @@
+{{define "content"}}
+{{ $AdTag := .AdTag }}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">
+            Sources available for Ad tag: <b><a href="/ad_tag/{{$AdTag.ID}}/edit/">{{ $AdTag.Name}}</a></b>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+            <td class="text-left"><b>Source Name</b></td>
+            <td><b>Source Price</b></td>
+            <td><b>Device type</b></td>
+            <td><b>Added</b></td>
+        </thead>
+
+        {{range $index, $element := .PublisherLinks}}
+            <tr>
+                <td class="text-left"><a href="/publisher/{{$element.PublisherID}}/link/{{$element.ID}}/edit/">{{ $element.Name }}</a></td>
+                <td class="text-center">{{ $element.Price }}</td>
+                <td class="text-center">{{ $element.Platform }}</td>
+                <td style="width: 20px;" class="text-center">
+                    <input id="is_added" type="checkbox" class="connect" {{if len $element.HasAdTag}}checked{{end}} data-publisher-link-id="{{$element.ID}}" data-ad-tag-id="{{$AdTag.ID}}"/>
+                </td>
+            </tr>
+        {{end}}
+    </table>
+</div>
+
+<script type="application/javascript" src="/static/js/publisher_link.js"></script>
+{{end}}

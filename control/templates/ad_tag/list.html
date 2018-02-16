@@ -1,0 +1,90 @@
+{{define "content"}}
+{{ $isShowArchived := .ShowArchived }}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">
+            Ad tag list for advertiser: <b>{{ .Advertiser.Name}}</b>
+            {{if $isShowArchived}}
+                <a href="/ad_tag/list/{{.Advertiser.ID}}">Show alive tags</a>
+            {{else}}
+                <a href="/ad_tag/list/{{.Advertiser.ID}}?show_archived=true">Show archived tags</a>
+            {{end}}
+        </div>
+        <div style="float: right; margin-right: 10px;">
+            <a href="/ad_tag/create/{{.Advertiser.ID}}">Add new<span class="glyphicon glyphicon-plus-sign" style="margin-left: 10px; " aria-hidden="true"></span></a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+            <td>Name</td>
+            <td>Activity</td>
+            <td>Publishers list</td>
+            <td>Add source</td>
+            <td>Statistics</td>
+            {{if not $isShowArchived}}
+                <td>Archive</td>
+            {{end}}
+        </thead>
+        {{range $index, $element := .AdTags}}
+        <tr>
+            <td><a href="/ad_tag/{{$element.ID}}/edit/">{{$element.Name}}</a></td>
+            <td style="width: 20px;" class="text-center">
+                <input type="checkbox" class="activate" {{if $element.IsActive}}checked{{end}} data-id="{{$element.ID}}" />
+            </td>
+            <td style="width: 130px;" class="text-center"><a href="/ad_tag/{{$element.ID}}/publisher/list/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a></td>
+            <td style="width: 130px;" class="text-center"><a href="/ad_tag/{{$element.ID}}/publisher_link/list/"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></td>
+            <td style="width: 130px;" class="text-center"><a href="/statistics?start_date={{$.TodayDate}}&end_date={{$.TodayDate}}&advertiser=0&publisher=0&ad_tag={{$element.ID}}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></td>
+            {{if not $isShowArchived}}
+                <td style="width: 20px;" class="text-center">
+                    <span style="cursor: pointer;" class="glyphicon glyphicon-trash archive" aria-hidden="true" data-id="{{$element.ID}}"></span>
+                </td>
+            {{end}}
+        </tr>
+        {{end}}
+    </table>
+</div>
+<script>
+    $(function () {
+        $('.activate').click(function () {
+            $("#loader").show();
+            $.ajax({
+                type: "POST",
+                url: "/ad_tag/" + $(this).attr("data-id") + "/activation/",
+                data: null,
+                success: function () {
+                    $("#loader").hide();
+                },
+                error: function () {
+                    $("#loader").hide();
+                    //TODO: add normal error handling
+                    console.log("error while saving is_active");
+                }
+            })
+        });
+
+        $('.archive').click(function () {
+            if (confirm("Are you sure you want archive this tag?")) {
+                $("#loader").show();
+                $.ajax({
+                    type: "POST",
+                    url: "/ad_tag/" + $(this).attr("data-id") + "/archive/",
+                    data: null,
+                    success: function () {
+                        $("#loader").hide();
+                        window.location.reload();
+                    },
+                    error: function () {
+                        $("#loader").hide();
+                        //TODO: add normal error handling
+                        console.log("error while saving archive");
+                    }
+                })
+            }
+        })
+    })
+</script>
+{{end}}

@@ -1,0 +1,31 @@
+{{define "content"}}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+        <div style="float: left;">Actions list for today</div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead style="text-align: center;">
+        <td>Time</td>
+        <td>User Name</td>
+        <td>Model</td>
+        <td>Action</td>
+        <td>Data</td>
+        </thead>
+        {{range $index, $element := .Items}}
+        <tr>
+            <td>{{$element.CreatedAt}}</td>
+            <td class="text-center">
+                {{$element.User.FullName}}
+            </td>
+            <td>{{$element.Model}}</td>
+            <td>{{$element.Action}}</td>
+            <td style="word-break: break-all;">{{printf "%s" $element.Log}}</td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+{{end}}

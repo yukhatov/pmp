@@ -1,0 +1,57 @@
+{{define "ad_tag_form"}}
+<form name="ad-tag-publisher" class="form-horizontal" role="form" method="post" action="/publisher/{{ .Publisher.ID }}/ad_tag/create/">
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" name="name" required="required">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="price" class="col-sm-2 control-label">Price</label>
+        <div class="col-sm-10">
+            <input
+                type="text"
+                class="form-control" id="price"
+                name="price"
+                required="required"
+                placeholder="5.0"
+            >
+        </div>
+    </div>
+    {{/*<div class="form-group">*/}}
+        {{/*<label for="shave_requests" class="col-sm-2 control-label">Shave requests (%)</label>*/}}
+        {{/*<div class="col-sm-10">*/}}
+            {{/*<input type="text" class="form-control" id="shave_requests" name="shave_requests" placeholder="10" value="{{if .Item}}{{.Item.ShaveRequests}}{{end}}">*/}}
+        {{/*</div>*/}}
+    {{/*</div>*/}}
+    {{/*<div class="form-group">*/}}
+        {{/*<label for="shave_impressions" class="col-sm-2 control-label">Shave impressions (%)</label>*/}}
+        {{/*<div class="col-sm-10">*/}}
+            {{/*<input type="text" class="form-control" id="shave_impressions" name="shave_impressions" placeholder="10" value="{{if .Item}}{{.Item.ShaveImpressions}}{{end}}">*/}}
+        {{/*</div>*/}}
+    {{/*</div>*/}}
+    <div class="form-group">
+        <label for="advertiser" class="col-sm-2 control-label">Advertiser</label>
+        <div class="col-sm-10">
+            <select class="form-control selectpicker" id="advertiser" name="advertiser" data-live-search="true">
+                {{range $index, $element := .AdvertisersList}}
+                    <option value="{{$element.ID}}">{{$element.Name}}</option>
+                {{end}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="ad_tag" class="col-sm-2 control-label">Ad tags</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="ad_tag" required="required" name="ad_tag">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+            <input id="submit" name="submit" type="submit" value="OK" class="btn btn-primary">
+            <input onclick="goBack()" type="button" value="Back" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+{{end}}

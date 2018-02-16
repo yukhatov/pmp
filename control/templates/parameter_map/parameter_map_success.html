@@ -1,0 +1,13 @@
+{{ define "content" }}
+    <div class="page-header">
+        <h1>Parameter <small>{{ if .IsEditing }} Editing {{else}} Creating {{end}}</small></h1>
+    </div>
+
+    {{ if .Success }}
+        <div class="alert alert-success" role="alert">You successfully {{ if .IsEditing }} edited {{else}} created {{end}} parameter</div>
+    {{ else }}
+        <div class="alert alert-danger" role="alert">Parameter is not {{ if .IsEditing }} edited {{else}} created {{end}}</div>
+    {{ end }}
+
+    {{ template "form" .}}
+{{ end }}

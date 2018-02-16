@@ -1,0 +1,7 @@
+{{define "content"}}
+    <div class="page-header">
+        <h1>Advertiser <small>{{ if .IsEditing }} Editing {{else}} Creating {{end}}</small></h1>
+    </div>
+
+    {{ template "form" .}}
+{{end}}

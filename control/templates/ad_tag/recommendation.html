@@ -1,0 +1,20 @@
+{{define "content"}}
+<table class="table">
+    <thead style="text-align: center;">
+        <td>Ad Tag name</td>
+        <td>Issue</td>
+        <td>Fixed</td>
+        <td>Activity</td>
+    </thead>
+    {{range $index, $element := .}}
+    <tr>
+        <td style="width: 300px;"><a href="/ad_tag/{{$element.AdTagID}}/edit/">{{$element.AdTag.Name}}</a></td>
+        <td class="text-center">{{$element.Recommendation}}</td>
+        <td class="text-center" style="width: 100px;"><button class="fixed" data-id="{{$element.ID}}">Fixed</button></td>
+        <td class="text-center" style="width: 80px;">
+            <input type="checkbox" class="activate_recommendation" {{if $element.AdTag.IsActive}}checked{{end}} data-id="{{$element.AdTag.ID}}" />
+        </td>
+    </tr>
+    {{end}}
+</table>
+{{end}}
